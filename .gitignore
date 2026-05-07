@@ -1,0 +1,15 @@
+# Build-Verzeichnis von CLion/CMake
+cmake-build-*/
+build/
+
+# Persönliche IDE-Einstellungen
+.idea/
+
+# Compiler-Output
+*.o
+*.obj
+*.exe
+*.out
+
+# Debug-Dateien
+*.dSYM/
