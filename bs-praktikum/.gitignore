@@ -1,0 +1,19 @@
+# Build-Artefakte — werden nicht ins Repo gepusht
+build/
+*.o
+*.a
+server
+test_kv
+
+# IDE-Dateien
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# CLion Remote
+cmake-build-*/

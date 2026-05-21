@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    cmake \
+    make \
+    gdb \
+    openssh-server \
+    netcat-openbsd \
+    iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
+# Benutzer fuer CLion Remote (user/bs2026)
+RUN useradd -ms /bin/bash user && \
+    echo "user:bs2026" | chpasswd && \
+    echo "root:bs2026" | chpasswd
+
+RUN mkdir /var/run/sshd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+
+WORKDIR /project
+
+# Port 2222: CLion SSH-Verbindung
+# Port 5555: Key-Value Server
+EXPOSE 2222 5555
+
+CMD ["/usr/sbin/sshd", "-p", "2222", "-D"]

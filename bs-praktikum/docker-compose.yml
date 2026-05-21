@@ -1,0 +1,19 @@
+# docker-compose.yml — startet die Entwicklungsumgebung mit einem Befehl
+#
+# Benutzen:
+#   docker compose up -d        <- Container starten
+#   docker compose exec dev bash <- Terminal im Container
+#   docker compose down          <- Container stoppen
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    container_name: bs-dev
+    ports:
+      - "2222:2222"   # SSH fuer CLion
+      - "5555:5555"   # Key-Value Server
+    volumes:
+      - .:/project    # Projektordner wird in Container eingebunden
+    restart: unless-stopped
