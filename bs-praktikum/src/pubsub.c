@@ -4,7 +4,8 @@
  * ZAHRA implementiert alle drei Funktionen.
  *
  * Grundprinzip (Polling):
- *   - Jeder Kindprozess hat eine lokale subs_t-Struktur auf dem Stack
+ *   - Jeder Kindprozess hat eine lokale subs_t-Struktur auf
+ * dem Stack
  *   - Er speichert beim SUB-Befehl die aktuelle version des Keys
  *   - In der Empfangs-Schleife prueft er regelmaessig ob version gestiegen ist
  *   - Wenn ja: schickt er das last_event an den Client via write()
