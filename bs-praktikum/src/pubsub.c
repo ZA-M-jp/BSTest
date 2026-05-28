@@ -19,46 +19,29 @@
 #include <unistd.h>
 
 void subs_init(subs_t *s) {
-    /* TODO: Zahra
-     * Einfach: memset(s, 0, sizeof(subs_t));
-     * Nullt count und alle last_versions auf 0.
-     */
-    (void)s;
+    memset(s, 0, sizeof(subs_t));
 }
 
 int subs_add(subs_t *s, const char *key) {
-    /* TODO: Zahra
-     *
-     * 1. Pruefen ob s->count < MAX_SUBS_PER_CLIENT
-     * 2. key in s->keys[s->count] kopieren
-     * 3. WICHTIG: aktuelle version als Startwert speichern:
-     *    s->last_versions[s->count] = store_get_version(key);
-     *    (Sonst werden alte Events nochmal geschickt!)
-     * 4. s->count++
-     * return 0 bei Erfolg, -1 wenn Liste voll
-     */
-    (void)s;
-    (void)key;
+    if (s->count >= MAX_SUBS_PER_CLIENT) {
+        return -1;                                  /* Liste voll */
+    }
+    strncpy(s->keys[s->count], key, MAX_KEY_LEN - 1);
+    s->keys[s->count][MAX_KEY_LEN - 1] = '\0';      /* sicher terminieren */
+    s->last_versions[s->count] = store_get_version(key);  /* Startwert merken */
+    s->count++;
     return 0;
 }
 
 void subs_check_and_notify(subs_t *s, int client_fd) {
-    /* TODO: Zahra
-     *
-     * for (int i = 0; i < s->count; i++) {
-     *     int v = store_get_version(s->keys[i]);
-     *     if (v > s->last_versions[i]) {
-     *         char event[MAX_EVENT_LEN];
-     *         store_get_event(s->keys[i], event);
-     *         write(client_fd, event, strlen(event));
-     *         write(client_fd, "\n", 1);
-     *         s->last_versions[i] = v;
-     *     }
-     * }
-     *
-     * Hinweis: write() kann fehlschlagen wenn der Socket weg ist.
-     * Einfach ignorieren — der naechste recv() bemerkt es.
-     */
-    (void)s;
-    (void)client_fd;
+    for (int i = 0; i < s->count; i++) {
+        int v = store_get_version(s->keys[i]);
+        if (v > s->last_versions[i]) {              /* Version gestiegen? */
+            char event[MAX_EVENT_LEN];
+            store_get_event(s->keys[i], event);
+            write(client_fd, event, strlen(event)); /* an MEINEN Client */
+            write(client_fd, "\n", 1);
+            s->last_versions[i] = v;                /* als gesehen markieren */
+        }
+    }
 }
