@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/test_kv.dir/tests/test_kvstore.c.o CMakeFiles/test_kv.dir/src/kvstore.c.o -o test_kv 

@@ -1,0 +1,4 @@
+/home/zahra/BSTest/bs-praktikum/CMakeFiles/server.dir
+/home/zahra/BSTest/bs-praktikum/CMakeFiles/test_kv.dir
+/home/zahra/BSTest/bs-praktikum/CMakeFiles/edit_cache.dir
+/home/zahra/BSTest/bs-praktikum/CMakeFiles/rebuild_cache.dir
